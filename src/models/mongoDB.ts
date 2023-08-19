@@ -7,7 +7,7 @@ const pass = "3bZ8AFzRt5Sk1T6K"
 
 async function connectToDatabase(): Promise<Db> {
     await client.connect();
-    console.log("Berhasil connect")
+    console.log("Connected to database")
     return client.db(db);
 }
 

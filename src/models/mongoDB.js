@@ -17,7 +17,7 @@ const pass = "3bZ8AFzRt5Sk1T6K";
 function connectToDatabase() {
     return __awaiter(this, void 0, void 0, function* () {
         yield client.connect();
-        console.log("Berhasil connect");
+        console.log("Connected to database");
         return client.db(db);
     });
 }
