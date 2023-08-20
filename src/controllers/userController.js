@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getUsersController = void 0;
+exports.createUserController = exports.getUsersController = void 0;
 const user_1 = require("../models/user");
 function getUsersController(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -23,3 +23,19 @@ function getUsersController(req, res) {
     });
 }
 exports.getUsersController = getUsersController;
+function createUserController(req, res) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const newUser = req.body;
+            if (newUser.password < 8) {
+                return res.send("Panjang password harus lebih dari 8");
+            }
+            const newUserAdded = yield (0, user_1.createUser)(newUser);
+            res.send("Berhasil membuat USER");
+        }
+        catch (error) {
+            return;
+        }
+    });
+}
+exports.createUserController = createUserController;
