@@ -12,13 +12,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const mongodb_1 = require("mongodb");
 const uri = "mongodb+srv://andradwikasa:3bZ8AFzRt5Sk1T6K@cluster0.wowqlzw.mongodb.net/?retryWrites=true&w=majority";
 const client = new mongodb_1.MongoClient(uri);
-const db = 'RevoU';
+const dbName = 'RevoU';
 const pass = "3bZ8AFzRt5Sk1T6K";
 function connectToDatabase() {
     return __awaiter(this, void 0, void 0, function* () {
         yield client.connect();
         console.log("Connected to database");
-        return client.db(db);
+        const db = client.db(dbName);
+        return db;
     });
 }
 exports.default = connectToDatabase;
