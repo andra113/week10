@@ -18,6 +18,10 @@ export async function createUserController(req:Request, res : Response) {
             return res.send("Panjang password harus lebih dari 8")
         }
 
+        if (!newUser.username || newUser.username.trim() === "") {
+            return res.send("Username tidak boleh kosong")
+        }
+
         const checkPassword = /^(?=.*[a-zA-Z])(?=.*\d).+$/.test(newUser.password)
         if (!checkPassword) {
             const thereIsLetter = /^(?=.*[a-zA-Z]).+$/.test(newUser.password)
