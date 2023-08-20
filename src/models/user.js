@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createUser = exports.getAllUsers = void 0;
+exports.getUserByUsername = exports.createUser = exports.getAllUsers = void 0;
 const mongoDB_1 = __importDefault(require("../config/mongoDB"));
 function getAllUsers() {
     return __awaiter(this, void 0, void 0, function* () {
@@ -32,3 +32,12 @@ function createUser(newUser) {
     });
 }
 exports.createUser = createUser;
+function getUserByUsername(userName) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const db = yield (0, mongoDB_1.default)();
+        const userCollection = db.collection('users');
+        const userResult = yield userCollection.findOne({ username: userName });
+        return userResult;
+    });
+}
+exports.getUserByUsername = getUserByUsername;

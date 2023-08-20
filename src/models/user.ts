@@ -19,3 +19,11 @@ export async function createUser(newUser: UserModel) {
     const newUserAdd = await userCollection.insertOne(newUser);
     return newUserAdd
 }
+
+export async function getUserByUsername(userName: string) {
+    const db = await connectToDatabase();
+    const userCollection = db.collection('users');
+    const userResult = await userCollection.findOne({username: userName});
+    return userResult   
+}
+

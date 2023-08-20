@@ -1,5 +1,5 @@
 import { Request,Response } from "express";
-import { getAllUsers, createUser } from "../models/user";
+import { getAllUsers, createUser, getUserByUsername } from "../models/user";
 import bcrypt from "bcrypt"
 
 export async function getUsersController(req:Request, res : Response) {
@@ -22,6 +22,11 @@ export async function createUserController(req:Request, res : Response) {
             return res.send("Username tidak boleh kosong")
         }
 
+        const existingAccount = await getUserByUsername(newUser.username);
+        if (existingAccount != null) {
+            return res.send("Username sudah ada");
+        }
+
         const checkPassword = /^(?=.*[a-zA-Z])(?=.*\d).+$/.test(newUser.password)
         if (!checkPassword) {
             const thereIsLetter = /^(?=.*[a-zA-Z]).+$/.test(newUser.password)
@@ -40,6 +45,6 @@ export async function createUserController(req:Request, res : Response) {
         const newUserAdded = await createUser(newUser)
         res.send("Berhasil membuat USER")
     } catch (error) {
-        return
+        res.json(error)
     }
 }

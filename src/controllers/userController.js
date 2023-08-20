@@ -37,6 +37,10 @@ function createUserController(req, res) {
             if (!newUser.username || newUser.username.trim() === "") {
                 return res.send("Username tidak boleh kosong");
             }
+            const existingAccount = yield (0, user_1.getUserByUsername)(newUser.username);
+            if (existingAccount != null) {
+                return res.send("Username sudah ada");
+            }
             const checkPassword = /^(?=.*[a-zA-Z])(?=.*\d).+$/.test(newUser.password);
             if (!checkPassword) {
                 const thereIsLetter = /^(?=.*[a-zA-Z]).+$/.test(newUser.password);
@@ -54,7 +58,7 @@ function createUserController(req, res) {
             res.send("Berhasil membuat USER");
         }
         catch (error) {
-            return;
+            res.json(error);
         }
     });
 }
