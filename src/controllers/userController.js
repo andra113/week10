@@ -8,9 +8,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createUserController = exports.getUsersController = void 0;
 const user_1 = require("../models/user");
+const bcrypt_1 = __importDefault(require("bcrypt"));
 function getUsersController(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -30,6 +34,8 @@ function createUserController(req, res) {
             if (newUser.password < 8) {
                 return res.send("Panjang password harus lebih dari 8");
             }
+            const hashedPaswword = yield bcrypt_1.default.hash(newUser.password, 10);
+            newUser.password = hashedPaswword;
             const newUserAdded = yield (0, user_1.createUser)(newUser);
             res.send("Berhasil membuat USER");
         }
