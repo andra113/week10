@@ -12,19 +12,23 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAllUsers = void 0;
-const mongoDB_1 = __importDefault(require("../models/mongoDB"));
-function getAllUsers(req, res) {
+exports.createUser = exports.getAllUsers = void 0;
+const mongoDB_1 = __importDefault(require("../config/mongoDB"));
+function getAllUsers() {
     return __awaiter(this, void 0, void 0, function* () {
-        try {
-            const db = yield (0, mongoDB_1.default)();
-            const userCollection = db.collection('users');
-            const users = yield userCollection.find().toArray();
-            res.json(users);
-        }
-        catch (error) {
-            res.status(500).json({ error: 'Error fetching users' });
-        }
+        const db = yield (0, mongoDB_1.default)();
+        const userCollection = db.collection('users');
+        const users = yield userCollection.find().toArray();
+        return users;
     });
 }
 exports.getAllUsers = getAllUsers;
+function createUser(newUser) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const db = yield (0, mongoDB_1.default)();
+        const userCollection = db.collection('users');
+        const newUserAdd = yield userCollection.insertOne(newUser);
+        return newUserAdd;
+    });
+}
+exports.createUser = createUser;
