@@ -31,8 +31,19 @@ function createUserController(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const newUser = req.body;
-            if (newUser.password < 8) {
+            if (newUser.password.length < 8) {
                 return res.send("Panjang password harus lebih dari 8");
+            }
+            const checkPassword = /^(?=.*[a-zA-Z])(?=.*\d).+$/.test(newUser.password);
+            if (!checkPassword) {
+                const thereIsLetter = /^(?=.*[a-zA-Z]).+$/.test(newUser.password);
+                const thereIsNumber = /^(?=.*\d).+$/.test(newUser.password);
+                if (!thereIsLetter) {
+                    return res.send("Password harus ada setidaknya 1 huruf");
+                }
+                if (!thereIsNumber) {
+                    return res.send("Password harus ada setidaknya 1 angka");
+                }
             }
             const hashedPaswword = yield bcrypt_1.default.hash(newUser.password, 10);
             newUser.password = hashedPaswword;
