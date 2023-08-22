@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createUserController = exports.getUsersController = void 0;
 const user_1 = require("../models/user");
+const userValidationResponse_1 = require("../utils/userValidationResponse");
 const bcrypt_1 = __importDefault(require("bcrypt"));
 function getUsersController(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -30,30 +31,17 @@ exports.getUsersController = getUsersController;
 function createUserController(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const newUser = req.body;
-            if (newUser.password.length < 8) {
-                return res.send("Panjang password harus lebih dari 8");
+            const { username, password, role } = req.body;
+            const validatingUserMessage = yield (0, userValidationResponse_1.validatingUser)(username, password);
+            if (validatingUserMessage.length > 0) {
+                return res.json(validatingUserMessage);
             }
-            if (!newUser.username || newUser.username.trim() === "") {
-                return res.send("Username tidak boleh kosong");
-            }
-            const existingAccount = yield (0, user_1.getUserByUsername)(newUser.username);
-            if (existingAccount != null) {
-                return res.send("Username sudah ada");
-            }
-            const checkPassword = /^(?=.*[a-zA-Z])(?=.*\d).+$/.test(newUser.password);
-            if (!checkPassword) {
-                const thereIsLetter = /^(?=.*[a-zA-Z]).+$/.test(newUser.password);
-                const thereIsNumber = /^(?=.*\d).+$/.test(newUser.password);
-                if (!thereIsLetter) {
-                    return res.send("Password harus ada setidaknya 1 huruf");
-                }
-                if (!thereIsNumber) {
-                    return res.send("Password harus ada setidaknya 1 angka");
-                }
-            }
-            const hashedPaswword = yield bcrypt_1.default.hash(newUser.password, 10);
-            newUser.password = hashedPaswword;
+            const hashedPaswword = yield bcrypt_1.default.hash(password, 10);
+            const newUser = {
+                username,
+                password: hashedPaswword,
+                role
+            };
             const newUserAdded = yield (0, user_1.createUser)(newUser);
             res.send("Berhasil membuat USER");
         }

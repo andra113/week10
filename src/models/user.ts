@@ -1,7 +1,7 @@
 import connectToDatabase from "../config/mongoDB";
 
 interface UserModel {
-    name: string,
+    username: string,
     password: string,
     role: string
 }

@@ -1,5 +1,6 @@
 import { Request,Response } from "express";
 import { getAllUsers, createUser, getUserByUsername } from "../models/user";
+import { validatingUser } from "../utils/userValidationResponse";
 import bcrypt from "bcrypt"
 
 export async function getUsersController(req:Request, res : Response) {
@@ -13,34 +14,20 @@ export async function getUsersController(req:Request, res : Response) {
 
 export async function createUserController(req:Request, res : Response) {
     try {
-        const newUser = req.body
-        if (newUser.password.length < 8) {
-            return res.send("Panjang password harus lebih dari 8")
-        }
+        const {username, password, role} = req.body
 
-        if (!newUser.username || newUser.username.trim() === "") {
-            return res.send("Username tidak boleh kosong")
+        const validatingUserMessage = await validatingUser(username, password);
+        
+        if (validatingUserMessage.length > 0) {
+            return res.json(validatingUserMessage)
         }
+        
+        const hashedPaswword = await bcrypt.hash(password, 10);
 
-        const existingAccount = await getUserByUsername(newUser.username);
-        if (existingAccount != null) {
-            return res.send("Username sudah ada");
-        }
-
-        const checkPassword = /^(?=.*[a-zA-Z])(?=.*\d).+$/.test(newUser.password)
-        if (!checkPassword) {
-            const thereIsLetter = /^(?=.*[a-zA-Z]).+$/.test(newUser.password)
-            const thereIsNumber = /^(?=.*\d).+$/.test(newUser.password)
-            if (!thereIsLetter) {
-                return res.send("Password harus ada setidaknya 1 huruf")
-            }
-            if (!thereIsNumber) {
-                return res.send("Password harus ada setidaknya 1 angka")
-            }
-        }
-
-        const hashedPaswword = await bcrypt.hash(newUser.password, 10);
-        newUser.password = hashedPaswword
+        const newUser = {
+            username, 
+            password: hashedPaswword, 
+            role};
 
         const newUserAdded = await createUser(newUser)
         res.send("Berhasil membuat USER")
