@@ -30,12 +30,14 @@ const express_1 = __importDefault(require("express"));
 const dotenv = __importStar(require("dotenv"));
 const cors_1 = __importDefault(require("cors"));
 const router_1 = __importDefault(require("./src/routes/router"));
+const transferRoutes_1 = __importDefault(require("./src/routes/transferRoutes"));
 dotenv.config();
 const app = (0, express_1.default)();
 const port = process.env.PORT || 4000;
 app.use((0, cors_1.default)());
 app.use(express_1.default.json());
 app.use('/api', router_1.default);
+app.use('/api', transferRoutes_1.default);
 app.listen(port, () => {
     console.log(`server listen ${port}`);
 });
