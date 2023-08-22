@@ -5,7 +5,7 @@ interface TransferModel {
     toAccountId: string;
     amount: number;
     status: string;
-    timestamp: Date;
+    createdDate: Date;
 }
 
 export async function getAllTranfers() {
