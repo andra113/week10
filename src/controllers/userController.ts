@@ -55,7 +55,6 @@ export async function loginUser(req: Request, res: Response) {
             message: "User succesfully logged in",
             token: userToken
         })
-
     } catch (error) {
 
     }
