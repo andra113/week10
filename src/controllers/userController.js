@@ -12,7 +12,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createUserController = exports.getUsersController = void 0;
+exports.loginUser = exports.createUserController = exports.getUsersController = void 0;
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const user_1 = require("../models/user");
 const userValidationResponse_1 = require("../utils/userValidationResponse");
 const bcrypt_1 = __importDefault(require("bcrypt"));
@@ -51,3 +52,27 @@ function createUserController(req, res) {
     });
 }
 exports.createUserController = createUserController;
+function loginUser(req, res) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const { username, password } = req.body;
+            const secretKey = "test token secret";
+            const user = yield (0, user_1.getUserByUsername)(username);
+            if (!user) {
+                return res.json("user can't be found");
+            }
+            const passwordIsMatched = yield bcrypt_1.default.compare(password, user.password);
+            if (!passwordIsMatched) {
+                return res.json("Wrong password");
+            }
+            const userToken = jsonwebtoken_1.default.sign(user, secretKey);
+            res.json({
+                message: "User succesfully logged in",
+                token: userToken
+            });
+        }
+        catch (error) {
+        }
+    });
+}
+exports.loginUser = loginUser;

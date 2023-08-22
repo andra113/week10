@@ -1,4 +1,5 @@
 import { Request,Response } from "express";
+import jwt from "jsonwebtoken"
 import { getAllUsers, createUser, getUserByUsername } from "../models/user";
 import { validatingUser } from "../utils/userValidationResponse";
 import bcrypt from "bcrypt"
@@ -33,5 +34,29 @@ export async function createUserController(req:Request, res : Response) {
         res.send("Berhasil membuat USER")
     } catch (error) {
         res.json(error)
+    }
+}
+
+export async function loginUser(req: Request, res: Response) {
+    try {
+        const { username, password} = req.body;
+        const secretKey = "test token secret"
+        const user = await getUserByUsername(username);
+        if (!user) {
+            return res.json("user can't be found")
+    }
+
+        const passwordIsMatched = await bcrypt.compare(password, user.password)
+        if (!passwordIsMatched) {
+            return res. json("Wrong password")
+        }
+        const userToken = jwt.sign(user, secretKey)
+        res.json({
+            message: "User succesfully logged in",
+            token: userToken
+        })
+
+    } catch (error) {
+
     }
 }
