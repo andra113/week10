@@ -26,12 +26,18 @@ exports.getTransfersController = getTransfersController;
 function createTransfersController(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const { fromAccountId, toAccountId, amount, status, createdDate } = req.body;
+            const { fromAccountId, toAccountId, amount } = req.body;
+            const status = "pending";
+            const createdDate = new Date();
             const newTransfer = { fromAccountId, toAccountId, amount, status, createdDate };
             const newTransferAdded = yield (0, transfers_1.createTransfers)(newTransfer);
-            res.json("New trasnfer succesfully added");
+            res.json({
+                message: "New transfer succesfully added",
+                data: newTransferAdded
+            });
         }
         catch (error) {
+            res.json();
         }
     });
 }

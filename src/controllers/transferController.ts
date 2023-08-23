@@ -12,14 +12,20 @@ export async function getTransfersController(req:Request, res : Response) {
 
 export async function createTransfersController (req: Request, res: Response) {
     try {
-        const {fromAccountId,toAccountId,amount, status , createdDate} = req.body
+        const {fromAccountId, toAccountId, amount} = req.body
+
+        const status = "pending";
+        const createdDate = new Date();
 
         const newTransfer = {fromAccountId, toAccountId, amount, status, createdDate};
 
         const newTransferAdded = await createTransfers(newTransfer)
 
-        res.json("New trasnfer succesfully added")
+        res.json({
+            message: "New transfer succesfully added",
+            data: newTransferAdded
+        });
     } catch (error) {
-
+        res.json()
     }
 }
