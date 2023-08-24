@@ -28,14 +28,17 @@ function getUsersController(req, res) {
     });
 }
 exports.getUsersController = getUsersController;
-function createUserController(req, res) {
+function createUserController(req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const { username, password, role } = req.body;
-            // const validatingUserMessage = await validatingUser(username, password);
-            // if (validatingUserMessage.length > 0) {
-            //     return res.json(validatingUserMessage)
-            // }
+            const checkUsername = yield (0, user_1.getUserByUsername)(username);
+            if (checkUsername != null) {
+                return res.status(409).json({
+                    error: 'Username already exists',
+                    message: 'The chosen username is not available. Please choose a different username.'
+                });
+            }
             const hashedPaswword = yield bcrypt_1.default.hash(password, 10);
             const newUser = {
                 username,
@@ -43,10 +46,13 @@ function createUserController(req, res) {
                 role
             };
             const newUserAdded = yield (0, user_1.createUser)(newUser);
-            res.send("Berhasil membuat USER");
+            res.json({
+                message: "Sucessfully register",
+                data: newUser
+            });
         }
         catch (error) {
-            res.json(error);
+            next(error);
         }
     });
 }

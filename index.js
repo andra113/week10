@@ -43,14 +43,14 @@ const app = (0, express_1.default)();
 const port = process.env.PORT || 4000;
 app.use((0, cors_1.default)());
 app.use(express_1.default.json());
-app.use('/api', router_1.default);
-app.use('/api', transferRoutes_1.default);
 app.use('/api-docs', swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swaggerDocument));
 app.use(OpenApiValidator.middleware({
-    apiSpec: 'doc/apiDoc.yaml',
+    apiSpec: swaggerDocument,
     validateRequests: true,
     validateResponses: true, // false by default
 }));
+app.use('/api', router_1.default);
+app.use('/api', transferRoutes_1.default);
 app.use(errorHandler_1.default);
 app.listen(port, () => {
     console.log(`server listen ${port}`);

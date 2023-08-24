@@ -22,17 +22,18 @@ const port = process.env.PORT || 4000;
 
 app.use(cors());
 app.use(express.json());
-app.use('/api', router)
-app.use('/api', transferRouter)
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use(
   OpenApiValidator.middleware({
-    apiSpec: 'doc/apiDoc.yaml',
+    apiSpec: swaggerDocument,
     validateRequests: true, // (default)
     validateResponses: true, // false by default
   }),
 );
+app.use('/api', router)
+app.use('/api', transferRouter)
 app.use(errorHandler)
+
 
 
 

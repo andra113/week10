@@ -1,4 +1,4 @@
-import { Request,Response } from "express";
+import { Request,Response, NextFunction } from "express";
 import jwt from "jsonwebtoken"
 import { getAllUsers, createUser, getUserByUsername } from "../models/user";
 import { validatingUser } from "../utils/userValidationResponse";
@@ -13,15 +13,17 @@ export async function getUsersController(req:Request, res : Response) {
     }
 }
 
-export async function createUserController(req:Request, res : Response) {
+export async function createUserController(req:Request, res : Response, next: NextFunction) {
     try {
         const {username, password, role} = req.body
 
-        // const validatingUserMessage = await validatingUser(username, password);
-        
-        // if (validatingUserMessage.length > 0) {
-        //     return res.json(validatingUserMessage)
-        // }
+        const checkUsername = await getUserByUsername(username);
+        if (checkUsername != null) {
+            return res.status(409).json({ 
+                error: 'Username already exists',
+                message: 'The chosen username is not available. Please choose a different username.'
+            });
+        }
         
         const hashedPaswword = await bcrypt.hash(password, 10);
 
@@ -31,9 +33,12 @@ export async function createUserController(req:Request, res : Response) {
             role};
 
         const newUserAdded = await createUser(newUser)
-        res.send("Berhasil membuat USER")
+        res.json({
+            message: "Sucessfully register",
+            data: newUser
+        })
     } catch (error) {
-        res.json(error)
+        next(error)
     }
 }
 

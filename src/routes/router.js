@@ -22,20 +22,16 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
-const swagger_ui_express_1 = __importDefault(require("swagger-ui-express"));
 const userController_1 = require("../controllers/userController");
 const fs = __importStar(require("fs"));
 const yaml = __importStar(require("js-yaml"));
 const yamlContent = fs.readFileSync('doc/apiDoc.yaml', 'utf8');
 const swaggerDocument = yaml.load(yamlContent);
 const router = (0, express_1.Router)();
-router.use('/api-docs', swagger_ui_express_1.default.serve);
-router.get('/api-docs', swagger_ui_express_1.default.setup(swaggerDocument));
+// router.use('/api-docs', swaggerUi.serve);
+// router.get('/api-docs', swaggerUi.setup(swaggerDocument));
 router.get('/users', userController_1.getUsersController);
 router.post('/register', userController_1.createUserController);
 router.post('/login', userController_1.loginUser);
