@@ -15,7 +15,7 @@ router.get('/api-docs', swaggerUi.setup(swaggerDocument));
 
 router.get('/users', getUsersController);
 
-router.post('/create', createUserController)
+router.post('/register', createUserController)
 
 router.post('/login', loginUser)
 export default router;

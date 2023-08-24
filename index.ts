@@ -1,29 +1,19 @@
-import express, { Express} from "express";
+import express, { Express, NextFunction, ErrorRequestHandler} from "express";
 import * as dotenv from "dotenv";
 import swaggerUi from 'swagger-ui-express';
 import swaggerJSDoc from "swagger-jsdoc";
+import * as OpenApiValidator from "express-openapi-validator";
 import cors from "cors";
 import router from "./src/routes/router";
 import transferRouter from "./src/routes/transferRoutes";
+import errorHandler from "./src/middleware/errorHandler";
 
-const options = {
-  definition: {
-    openapi: '3.0.0',
-    info: {
-      title: 'Your API',
-      version: '1.0.0',
-      description: 'API documentation using Swagger',
-    },
-    servers: [
-      {
-        url: 'http://localhost:4000',
-      },
-    ],
-  },
-  apis: ['src/routes/*.js'],
-};
+import * as fs from 'fs';
+import * as yaml from 'js-yaml';
 
-const specs = swaggerJSDoc(options);
+const yamlContent = fs.readFileSync('doc/apiDoc.yaml', 'utf8');
+const swaggerDocument: any = yaml.load(yamlContent)
+
 
 dotenv.config()
 
@@ -32,9 +22,17 @@ const port = process.env.PORT || 4000;
 
 app.use(cors());
 app.use(express.json());
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 app.use('/api', router)
 app.use('/api', transferRouter)
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use(
+  OpenApiValidator.middleware({
+    apiSpec: 'doc/apiDoc.yaml',
+    validateRequests: true, // (default)
+    validateResponses: true, // false by default
+  }),
+);
+app.use(errorHandler)
 
 
 

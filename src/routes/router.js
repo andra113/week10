@@ -37,6 +37,6 @@ const router = (0, express_1.Router)();
 router.use('/api-docs', swagger_ui_express_1.default.serve);
 router.get('/api-docs', swagger_ui_express_1.default.setup(swaggerDocument));
 router.get('/users', userController_1.getUsersController);
-router.post('/create', userController_1.createUserController);
+router.post('/register', userController_1.createUserController);
 router.post('/login', userController_1.loginUser);
 exports.default = router;

@@ -15,7 +15,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.loginUser = exports.createUserController = exports.getUsersController = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const user_1 = require("../models/user");
-const userValidationResponse_1 = require("../utils/userValidationResponse");
 const bcrypt_1 = __importDefault(require("bcrypt"));
 function getUsersController(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -33,10 +32,10 @@ function createUserController(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const { username, password, role } = req.body;
-            const validatingUserMessage = yield (0, userValidationResponse_1.validatingUser)(username, password);
-            if (validatingUserMessage.length > 0) {
-                return res.json(validatingUserMessage);
-            }
+            // const validatingUserMessage = await validatingUser(username, password);
+            // if (validatingUserMessage.length > 0) {
+            //     return res.json(validatingUserMessage)
+            // }
             const hashedPaswword = yield bcrypt_1.default.hash(password, 10);
             const newUser = {
                 username,

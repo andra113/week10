@@ -17,11 +17,11 @@ export async function createUserController(req:Request, res : Response) {
     try {
         const {username, password, role} = req.body
 
-        const validatingUserMessage = await validatingUser(username, password);
+        // const validatingUserMessage = await validatingUser(username, password);
         
-        if (validatingUserMessage.length > 0) {
-            return res.json(validatingUserMessage)
-        }
+        // if (validatingUserMessage.length > 0) {
+        //     return res.json(validatingUserMessage)
+        // }
         
         const hashedPaswword = await bcrypt.hash(password, 10);
 

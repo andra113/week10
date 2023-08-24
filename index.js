@@ -29,35 +29,29 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const dotenv = __importStar(require("dotenv"));
 const swagger_ui_express_1 = __importDefault(require("swagger-ui-express"));
-const swagger_jsdoc_1 = __importDefault(require("swagger-jsdoc"));
+const OpenApiValidator = __importStar(require("express-openapi-validator"));
 const cors_1 = __importDefault(require("cors"));
 const router_1 = __importDefault(require("./src/routes/router"));
 const transferRoutes_1 = __importDefault(require("./src/routes/transferRoutes"));
-const options = {
-    definition: {
-        openapi: '3.0.0',
-        info: {
-            title: 'Your API',
-            version: '1.0.0',
-            description: 'API documentation using Swagger',
-        },
-        servers: [
-            {
-                url: 'http://localhost:4000',
-            },
-        ],
-    },
-    apis: ['src/routes/*.js'],
-};
-const specs = (0, swagger_jsdoc_1.default)(options);
+const errorHandler_1 = __importDefault(require("./src/middleware/errorHandler"));
+const fs = __importStar(require("fs"));
+const yaml = __importStar(require("js-yaml"));
+const yamlContent = fs.readFileSync('doc/apiDoc.yaml', 'utf8');
+const swaggerDocument = yaml.load(yamlContent);
 dotenv.config();
 const app = (0, express_1.default)();
 const port = process.env.PORT || 4000;
 app.use((0, cors_1.default)());
 app.use(express_1.default.json());
-app.use('/api-docs', swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(specs));
 app.use('/api', router_1.default);
 app.use('/api', transferRoutes_1.default);
+app.use('/api-docs', swagger_ui_express_1.default.serve, swagger_ui_express_1.default.setup(swaggerDocument));
+app.use(OpenApiValidator.middleware({
+    apiSpec: 'doc/apiDoc.yaml',
+    validateRequests: true,
+    validateResponses: true, // false by default
+}));
+app.use(errorHandler_1.default);
 app.listen(port, () => {
     console.log(`server listen ${port}`);
 });
