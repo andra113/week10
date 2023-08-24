@@ -35,7 +35,9 @@ export async function createUserController(req:Request, res : Response, next: Ne
         const newUserAdded = await createUser(newUser)
         res.json({
             message: "Sucessfully register",
-            data: newUser
+            data: {
+                id: newUserAdded.insertedId.toString()
+            }
         })
     } catch (error) {
         next(error)

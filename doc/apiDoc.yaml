@@ -19,10 +19,13 @@ components:
       properties:
         username:
           type: string
+          example: andra
         password:
           type: string
+          example: andra123
         role:
           type: string
+          example: admin
     RegisterUser:
       type: object
       properties:
@@ -51,11 +54,26 @@ components:
           type: string
         password:
           type: string
+    TransferList:
+      type: object
+      properties:
+        senderId: 
+          type: integer
+        toAccountId:
+          type: integer
+        amount:
+          type: integer
+        status:
+          type: string
+        createdDate:
+          type: string
     BadRequest:
       type: object
       properties:
         error:
           type: string
+        message:
+          type: string  
 paths:
   /api/users:
     get:
@@ -92,7 +110,7 @@ paths:
                     type: object
                     properties:
                       id:
-                        type: integer
+                        type: string
                       username:
                         type: string
                       role:
@@ -127,8 +145,42 @@ paths:
                 properties:
                   message:
                     type: string
-                  data:
+                  token:
                     type: string
+        '400':
+          description: 'Bad Request'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+  /api/transfers:
+    get:
+      summary: 'Get Transfer List:'
+      responses:
+        '200':
+          description: 'Successful to get transfer List'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TransferList'          
+    post:
+      summary: 'Create new transfer'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransferList'
+      responses:
+        '200':
+          description: 'New Transfer Created'
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/TransferList'
         '400':
           description: 'Bad Request'
           content:

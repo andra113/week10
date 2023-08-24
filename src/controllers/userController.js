@@ -48,7 +48,9 @@ function createUserController(req, res, next) {
             const newUserAdded = yield (0, user_1.createUser)(newUser);
             res.json({
                 message: "Sucessfully register",
-                data: newUser
+                data: {
+                    id: newUserAdded.insertedId.toString()
+                }
             });
         }
         catch (error) {

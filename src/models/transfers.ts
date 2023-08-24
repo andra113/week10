@@ -2,11 +2,11 @@ import connectToDatabase from "../config/mongoDB";
 import { ObjectId } from "mongodb";
 
 interface TransferModel {
-    fromAccountId: string;
-    toAccountId: string;
+    fromAccountId: number;
+    toAccountId: number;
     amount: number;
     status: string;
-    createdDate: Date;
+    createdDate: string;
 }
 
 export async function getAllTranfers() {
