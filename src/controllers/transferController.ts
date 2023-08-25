@@ -6,7 +6,7 @@ export async function getTransfersController(req:Request, res : Response) {
         const transfers = await getAllTranfers()
         res.json(transfers)
     } catch (error) {
-        res.json (error)
+        return error
     }
 }
 

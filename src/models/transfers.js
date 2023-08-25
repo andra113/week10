@@ -20,6 +20,12 @@ function getAllTranfers() {
         const db = yield (0, mongoDB_1.default)();
         const transferCollection = db.collection('transfers');
         const transfers = yield transferCollection.find().toArray();
+        if (Array.isArray(transfers)) {
+            console.log('The value is an array.');
+        }
+        else {
+            console.log("value is not array");
+        }
         return transfers;
     });
 }

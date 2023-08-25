@@ -5,7 +5,7 @@ async function authentication(req: Request, res: Response, next: NextFunction) {
     const token = req.headers.authorization?.split(' ')[1]!;
     
     if (!token) {
-        res.json("Unauthorized access");
+       return res.json("Unauthorized access");
     }
     const secretKey = "test token secret";
 
@@ -13,13 +13,13 @@ async function authentication(req: Request, res: Response, next: NextFunction) {
         const decodedToken = jwt.verify(token, secretKey) as {role: string};
 
         if (decodedToken.role != "admin" && decodedToken.role != "approver" && decodedToken.role != "maker") {
-        res.json("only admin, approver, maker can access this");
+         return res.status(401).json("only admin, approver, maker can access this");
         }
 
         next()
 
     } catch (error) {
-        res.json({"message": "Invalid token"})
+        return res.json({"message": "Invalid token"})
     }
 }
 

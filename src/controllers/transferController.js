@@ -18,7 +18,7 @@ function getTransfersController(req, res) {
             res.json(transfers);
         }
         catch (error) {
-            res.json(error);
+            return error;
         }
     });
 }

@@ -18,18 +18,18 @@ function authentication(req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {
         const token = (_a = req.headers.authorization) === null || _a === void 0 ? void 0 : _a.split(' ')[1];
         if (!token) {
-            res.json("Unauthorized access");
+            return res.json("Unauthorized access");
         }
         const secretKey = "test token secret";
         try {
             const decodedToken = jsonwebtoken_1.default.verify(token, secretKey);
             if (decodedToken.role != "admin" && decodedToken.role != "approver" && decodedToken.role != "maker") {
-                res.json("only admin, approver, maker can access this");
+                return res.status(401).json("only admin, approver, maker can access this");
             }
             next();
         }
         catch (error) {
-            res.json({ "message": "Invalid token" });
+            return res.json({ "message": "Invalid token" });
         }
     });
 }

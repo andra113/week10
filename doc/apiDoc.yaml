@@ -8,11 +8,10 @@ servers:
     description: 'Development server'
 components:
   securitySchemes:
-    bearer:
+    bearerAuth:
       type: http
       scheme: bearer
       bearerFormat: JWT
-      description: 'Bearer with JWT Token'
   schemas:
     User:
       type: object
@@ -57,7 +56,7 @@ components:
     TransferList:
       type: object
       properties:
-        senderId: 
+        fromAccountId: 
           type: integer
         toAccountId:
           type: integer
@@ -86,7 +85,7 @@ paths:
               schema:
                 type: array
                 items:
-                $ref: '#/components/schemas/User'
+                  $ref: '#/components/schemas/User'
   /api/register:
     post:
       summary: 'Register new user'
@@ -156,6 +155,8 @@ paths:
   /api/transfers:
     get:
       summary: 'Get Transfer List:'
+      security:
+        - bearerAuth: []
       responses:
         '200':
           description: 'Successful to get transfer List'

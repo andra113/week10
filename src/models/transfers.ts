@@ -13,6 +13,11 @@ export async function getAllTranfers() {
     const db = await connectToDatabase();
     const transferCollection = db.collection('transfers');
     const transfers = await transferCollection.find().toArray();
+    if (Array.isArray(transfers)) {
+        console.log('The value is an array.');
+    } else {
+        console.log("value is not array")
+    }
     return transfers;
 }
 
