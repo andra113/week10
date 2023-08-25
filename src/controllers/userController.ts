@@ -70,6 +70,9 @@ export async function loginUser(req: Request, res: Response) {
             token: userToken
         })
     } catch (error) {
-
+        // Log the error
+        console.error("An error occurred in loginUser:", error);
+        // Respond with an error message
+        res.status(500).json({message: "An internal server error occurred"});
     }
 }
