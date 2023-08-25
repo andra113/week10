@@ -1,9 +1,10 @@
 import { MongoClient, Db } from "mongodb";
+import * as dotenv from "dotenv";
+dotenv.config();
 
-const uri = "mongodb+srv://andradwikasa:3bZ8AFzRt5Sk1T6K@cluster0.wowqlzw.mongodb.net/?retryWrites=true&w=majority";
+const uri = process.env.MONGODB!;
 const client = new MongoClient(uri);
 const dbName = 'RevoU';
-const pass = "3bZ8AFzRt5Sk1T6K"
 
 async function connectToDatabase(): Promise<Db> {
     await client.connect();
