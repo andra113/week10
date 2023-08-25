@@ -247,6 +247,8 @@ paths:
                   $ref: '#/components/schemas/TransferList'          
     post:
       summary: 'Create new transfer'
+      security:
+        - bearerAuth: []
       requestBody:
         required: true
         content:
