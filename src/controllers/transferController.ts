@@ -48,14 +48,13 @@ export async function updateTransferStatus(req: Request, res: Response) {
         const transferResult = await getTransferById(id);
         const {status} = req.body
         if (!transferResult) {
-            res.json({message: "transfer can't be found"})
+            return res.status(404).json({message: "transfer can't be found"})
         }
 
         await updateTransfer(status, id)
 
         const updatedTransfer = await getTransferById(id)
-        console.log(status)
-        res.json(updatedTransfer) 
+        res.status(200).json(updatedTransfer) 
     } catch (error) {
             res.json(error)
     }
