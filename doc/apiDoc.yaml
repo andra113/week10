@@ -211,6 +211,24 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/BadRequest'
+        '404':
+          description: 'User Not Found'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+        '401':
+          description: 'Unauthorized'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
   /api/transfers:
     get:
       summary: 'Get Transfer List:'

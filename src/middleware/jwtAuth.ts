@@ -4,7 +4,7 @@ import * as dotenv from "dotenv"
 
 dotenv.config()
 
-const secretKey = process.env.SECRET_KEY!;
+export const secretKey = process.env.SECRET_KEY!;
 
 export async function authentication(req: Request, res: Response, next: NextFunction) {
     const token = req.headers.authorization?.split(' ')[1]!;

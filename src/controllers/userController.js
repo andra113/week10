@@ -16,6 +16,7 @@ exports.loginUser = exports.createUserController = exports.getUsersController = 
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const user_1 = require("../models/user");
 const bcrypt_1 = __importDefault(require("bcrypt"));
+const jwtAuth_1 = require("../middleware/jwtAuth");
 function getUsersController(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -32,6 +33,12 @@ function createUserController(req, res, next) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const { username, password, role } = req.body;
+            if (!username || username.trim() === "") {
+                return res.status(400).json({
+                    error: 'Invalid Username',
+                    message: 'Username cannot be empty or contain only whitespace.'
+                });
+            }
             const checkUsername = yield (0, user_1.getUserByUsername)(username);
             if (checkUsername != null) {
                 return res.status(409).json({
@@ -63,17 +70,16 @@ function loginUser(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const { username, password } = req.body;
-            const secretKey = "test token secret";
             const user = yield (0, user_1.getUserByUsername)(username);
             if (!user) {
-                return res.json("user can't be found");
+                return res.status(404).json({ message: "user can't be found" });
             }
             const passwordIsMatched = yield bcrypt_1.default.compare(password, user.password);
             if (!passwordIsMatched) {
-                return res.json("Wrong password");
+                return res.status(401).json({ message: "Incorrect password" });
             }
-            const userToken = jsonwebtoken_1.default.sign(user, secretKey);
-            res.json({
+            const userToken = jsonwebtoken_1.default.sign(user, jwtAuth_1.secretKey);
+            res.status(200).json({
                 message: "User succesfully logged in",
                 token: userToken
             });
