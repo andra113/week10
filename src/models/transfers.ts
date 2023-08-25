@@ -34,6 +34,20 @@ export async function getTransferById(id: string) {
     const transferResult = await transferCollection.findOne({_id: new ObjectId(id)});
     return transferResult;
 }
+
+export async function updateTransfer(status: string, id: string) {
+    const db = await connectToDatabase();
+    const transferCollection = db.collection('transfers');
+    const transferResult = await transferCollection.updateOne({_id: new ObjectId(id)},
+    {
+        $set: {
+            status: status
+        },
+        $currentDate: { updatedDate: true }    
+    });
+    return transferResult;
+}
+
 // export async function getUserByUsername(userName: string) {
 //     const db = await connectToDatabase();
 //     const userCollection = db.collection('users');

@@ -10,4 +10,5 @@ const transferRouter = (0, express_1.Router)();
 transferRouter.get('/transfers', jwtAuth_1.default, transferController_1.getTransfersController);
 transferRouter.get('/transfers/:id', jwtAuth_1.default, transferController_1.getTransferByIdController);
 transferRouter.post('/transfers', transferController_1.createTransfersController);
+transferRouter.patch('/transfers/:id', jwtAuth_1.default, transferController_1.updateTransferStatus);
 exports.default = transferRouter;

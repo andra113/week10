@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getTransferById = exports.createTransfers = exports.getAllTranfers = void 0;
+exports.updateTransfer = exports.getTransferById = exports.createTransfers = exports.getAllTranfers = void 0;
 const mongoDB_1 = __importDefault(require("../config/mongoDB"));
 const mongodb_1 = require("mongodb");
 function getAllTranfers() {
@@ -48,6 +48,20 @@ function getTransferById(id) {
     });
 }
 exports.getTransferById = getTransferById;
+function updateTransfer(status, id) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const db = yield (0, mongoDB_1.default)();
+        const transferCollection = db.collection('transfers');
+        const transferResult = yield transferCollection.updateOne({ _id: new mongodb_1.ObjectId(id) }, {
+            $set: {
+                status: status
+            },
+            $currentDate: { updatedDate: true }
+        });
+        return transferResult;
+    });
+}
+exports.updateTransfer = updateTransfer;
 // export async function getUserByUsername(userName: string) {
 //     const db = await connectToDatabase();
 //     const userCollection = db.collection('users');

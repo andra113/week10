@@ -114,6 +114,7 @@ components:
           example: 2023-08-23
         updatedDate:
           type: string
+          format: date-time
           example: 2023-08-25
     PatchTransfer:
       type: object
@@ -264,4 +265,4 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/PatchTransferSuccess"
-         
+  

@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getTransferByIdController = exports.createTransfersController = exports.getTransfersController = void 0;
+exports.updateTransferStatus = exports.getTransferByIdController = exports.createTransfersController = exports.getTransfersController = void 0;
 const transfers_1 = require("../models/transfers");
 function getTransfersController(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -56,3 +56,23 @@ function getTransferByIdController(req, res) {
     });
 }
 exports.getTransferByIdController = getTransferByIdController;
+function updateTransferStatus(req, res) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const id = req.params.id;
+            const transferResult = yield (0, transfers_1.getTransferById)(id);
+            const { status } = req.body;
+            if (!transferResult) {
+                res.json({ message: "transfer can't be found" });
+            }
+            yield (0, transfers_1.updateTransfer)(status, id);
+            const updatedTransfer = yield (0, transfers_1.getTransferById)(id);
+            console.log(status);
+            res.json(updatedTransfer);
+        }
+        catch (error) {
+            res.json(error);
+        }
+    });
+}
+exports.updateTransferStatus = updateTransferStatus;
