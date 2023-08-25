@@ -21,8 +21,8 @@ This application provides a backend service to manage users and their transfers.
 
 You can explore and interact with the API using Swagger UI. Here are the available endpoints:
 
-- [API Server](https://week-10-andra113-production.up.railway.app/api)
-- [Swagger UI](https://week-10-andra113-production.up.railway.app/api-docs)
+- [API Server](https://amethyst-giraffe-sock.cyclic.cloud/)
+- [Swagger UI](https://amethyst-giraffe-sock.cyclic.cloud/api-docs)
 
 ## Endpoints
 
