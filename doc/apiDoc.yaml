@@ -272,6 +272,13 @@ paths:
       summary: 'Edit transfer status to approved or rejected:'
       security:
         - bearerAuth: []
+      parameters:
+        - in: path
+          name: transfersId
+          required: true
+          schema:
+            type: string 
+          description: The ID of the transfer to be edited.
       requestBody:
         required: true
         content:
