@@ -4,7 +4,7 @@ info:
   version: 1.0.0
   description: 'Transfer management api assignment'
 servers:
-  - url: https://week-10-andra113-production.up.railway.app
+  - url: https://amethyst-giraffe-sock.cyclic.cloud
     description: 'Production'
   - url: http://localhost:4000
     description: 'Development server'
